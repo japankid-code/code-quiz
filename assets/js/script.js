@@ -10,36 +10,59 @@
 // dont forget to add classes in html
 let questionEl = document.querySelector("#question-text");
 let formEl = document.querySelector("#answer-form")
+let timerEl = document.querySelector("#time-left")
 
-let timeLeft = 80;
+
 // create list of questionObjects
     // answers will be a list inside the object, use questionObj[i].answers[i] to ref
 let questionList = [
     {
-    question: "question 1 text",
-    answers: ['1', '2', '3', '4'],
+        question: "welcome to code tha quiz, questions coming soon",
+        answers: ['1', '2', '3', '4'],
+        content: "explanation of game",
     },
     {
-    question: "question 2 text",
-    answers: ['1', '2', '3', '4'],
+        question: "question 1 text",
+        answers: ['1', '2', '3', '4'],
     },
     {
-    question: "question 3 text",
-    answers: ['1', '2', '3', '4'],
+        question: "question 2 text",
+        answers: ['1', '2', '3', '4'],
     },
     {
-    question: "question 4 text",
-    answers: ['1', '2', '3', '4'],
+        question: "question 3 text",
+        answers: ['1', '2', '3', '4'],
     },
     {
-    question: "question 5 text",
-    answers: ['1', '2', '3', '4'],
+        question: "question 4 text",
+        answers: ['1', '2', '3', '4'],
+    },
+    {
+        question: "question 5 text",
+        answers: ['1', '2', '3', '4'],
     }
-];
+]
 // create timer function for remaining time
 let countdown = function() {
-    
-};
+    var timeLeft = 80;
+    var timeInterval = setInterval(function() {
+      // As long as the `timeLeft` is greater than 1
+      if (timeLeft > 1) {
+        // Set the `textContent` of `timerEl` to show the remaining seconds
+        timerEl.textContent = `${timeLeft} seconds remaining.`;
+        timeLeft--;
+        return timeLeft;
+      } else if (timeLeft === 1) {
+        timerEl.textContent = `${timeLeft} second remaining.`;
+        timeLeft--;
+        return timeLeft;
+      } else {
+        timerEl.textContent = '';
+        clearInterval(timeInterval);
+        return timeLeft;
+      }
+    }, 1000); // runs once per second
+}
 // create intro function that displays the rules using questionObj[0] properties
     //pressing start will run playGame()
 
