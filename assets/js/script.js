@@ -12,14 +12,16 @@ let questionEl = document.querySelector("#question-text");
 let answerEl = document.querySelector("#answer-form")
 let timerEl = document.querySelector("#time-left")
 
+let timeLeft = 80;
+
 function emptyChildren(parent) {
     while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
     }
 }
 
-// create list of questionObjects
-    // answers will be a list inside the object, use questionObj[i].answers[i] to ref
+// create list of questionListects
+    // answers will be a list inside the object, use questionList[i].answers[i] to ref
 let questionList = [
     {
         question: "Welcome to the code quiz!",
@@ -30,23 +32,48 @@ let questionList = [
     },
     {
         question: "question 1 text",
-        answers: ['1', '2', '3', '4'],
+        answers: [
+            '1',
+            '2',
+            '3',
+            '4'
+        ],
     },
     {
         question: "question 2 text",
-        answers: ['1', '2', '3', '4'],
+        answers: [
+            '1',
+            '2',
+            '3',
+            '4'
+        ],
     },
     {
         question: "question 3 text",
-        answers: ['1', '2', '3', '4'],
+        answers: [
+            '1',
+            '2',
+            '3',
+            '4'
+        ],
     },
     {
         question: "question 4 text",
-        answers: ['1', '2', '3', '4'],
+        answers: [
+            '1',
+            '2',
+            '3',
+            '4'
+        ],
     },
     {
         question: "question 5 text",
-        answers: ['1', '2', '3', '4'],
+        answers: [
+            '1',
+            '2',
+            '3',
+            '4'
+        ],
     }
 ]
 // create timer function for remaining time
@@ -70,9 +97,9 @@ let countdown = function() {
       }
     }, 1000); // runs once per second
 }
-// create intro function that displays the rules using questionObj[0] properties
+// create intro function that displays the rules using questionList[0] properties
     //pressing start will run playGame()
-let intro = function() {
+let intro = function(e) {
     questionEl.textContent = questionList[0].question;
     emptyChildren(answerEl);
     answerP = document.createElement("p");
@@ -81,22 +108,23 @@ let intro = function() {
     readyButton.textContent = questionList[0].answers[1];
     answerEl.appendChild(answerP);
     answerEl.appendChild(readyButton);
+    playGame(e);
 }
 
 // create playGame() containing game logic
 let playGame = function(e) {
-    // fill in question prompt and answer buttons from questionObj
+    // fill in question prompt and answer buttons from questionList
     // generate question text content `${questionList[q].question}`
     if (timeLeft > 0) {
         for (let q = 1; q < questionList.length; q++) {
-            console.log("q");
+            console.log(q);
             // if there is time remaing, or there are questions left
-            if (questionObj[q] !== undefined) {
+            if (questionList[q] === undefined) {
                 console.log("no more questions");
                 // generate buttons for each answer in answers
             } else {
-                for (let a = 0; a < questionObj[q].answers.length; a++) {
-                    console.log("a");
+                for (let a = 0; a < questionList[q].answers.length; a++) {
+                    console.log(a);
                     // textContent `${questionList[q].answers[a]}`
                     // need something that will wait for a click after generating all this stuff
                     // accepting click event target's id value to determine correctness
@@ -104,14 +132,20 @@ let playGame = function(e) {
                 }
             }
             // on correct answer, value of event target's 
-                // data-type-id=n === questionObj[i].answers[n], continue
+                // data-type-id=n === questionList[i].answers[n], continue
             //on wrong answer, subtract from the time remaining
         }
     }
 }
 // create a buttonHandler() to preventdefault on all buttons
+var buttonHandler = function(e) {
+    e.preventDefault();
+    console.log(e.target);
+    intro(e);
+}
 
 // create event listener
     // add function to delegate clicks to buttons by data-type-id
+answerEl.addEventListener("click", buttonHandler)
 
 intro();
