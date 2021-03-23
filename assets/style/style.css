@@ -48,11 +48,11 @@ section#question {
     font-size: 36px;
 }
 
-form#answers {
+#answer-form {
     width: 80%;
 }
 
-form#answers button {
+#answer-form button {
     display: inline-flex;
     align-items: center;
     justify-content: flex-start;

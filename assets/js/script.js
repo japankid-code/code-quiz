@@ -9,6 +9,7 @@
 // let all the elements and variables we'll need to use
 // dont forget to add classes in html
 let questionEl = document.querySelector("#question-text");
+let answerEl = document.querySelector("#answer-form")
 let formEl = document.querySelector("#answer-form")
 let timerEl = document.querySelector("#time-left")
 
@@ -17,9 +18,8 @@ let timerEl = document.querySelector("#time-left")
     // answers will be a list inside the object, use questionObj[i].answers[i] to ref
 let questionList = [
     {
-        question: "welcome to code tha quiz, questions coming soon",
-        answers: ['1', '2', '3', '4'],
-        content: "explanation of game",
+        question: "Welcome to the code quiz!",
+        answers: "Try to answer the coding question within the time limit. Wrong answers subtract from your score!",
     },
     {
         question: "question 1 text",
@@ -65,33 +65,36 @@ let countdown = function() {
 }
 // create intro function that displays the rules using questionObj[0] properties
     //pressing start will run playGame()
+let intro = function() {
+    
+}
 
 // create playGame() containing game logic
 let playGame = function(e) {
-        // fill in question prompt and answer buttons from questionObj
-        // generate question text content `${questionList[q].question}`
-        if (timeLeft > 0) {
-            for (let q = 1; q < questionList.length; q++) {
-                console.log("q");
-                // if there is time remaing, or there are questions left
-                if (questionObj[q] !== undefined) {
-                    console.log("no more questions");
-                    // generate buttons for each answer in answers
-                } else {
-                    for (let a = 0; a < questionObj[q].answers.length; a++) {
-                        console.log("a");
-                        // textContent `${questionList[q].answers[a]}`
-                        // need something that will wait for a click after generating all this stuff
-                        // accepting click event target's id value to determine correctness
-                        // while generating buttons for each answer, increment on data-type-id
-                    }
+    // fill in question prompt and answer buttons from questionObj
+    // generate question text content `${questionList[q].question}`
+    if (timeLeft > 0) {
+        for (let q = 1; q < questionList.length; q++) {
+            console.log("q");
+            // if there is time remaing, or there are questions left
+            if (questionObj[q] !== undefined) {
+                console.log("no more questions");
+                // generate buttons for each answer in answers
+            } else {
+                for (let a = 0; a < questionObj[q].answers.length; a++) {
+                    console.log("a");
+                    // textContent `${questionList[q].answers[a]}`
+                    // need something that will wait for a click after generating all this stuff
+                    // accepting click event target's id value to determine correctness
+                    // while generating buttons for each answer, increment on data-type-id
                 }
-                // on correct answer, value of event target's 
-                    // data-type-id=n === questionObj[i].answers[n], continue
-                //on wrong answer, subtract from the time remaining
             }
+            // on correct answer, value of event target's 
+                // data-type-id=n === questionObj[i].answers[n], continue
+            //on wrong answer, subtract from the time remaining
         }
     }
+}
 // create a buttonHandler() to preventdefault on all buttons
 
 // create event listener
