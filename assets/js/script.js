@@ -10,16 +10,23 @@
 // dont forget to add classes in html
 let questionEl = document.querySelector("#question-text");
 let answerEl = document.querySelector("#answer-form")
-let formEl = document.querySelector("#answer-form")
 let timerEl = document.querySelector("#time-left")
 
+function emptyChildren(parent) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
+}
 
 // create list of questionObjects
     // answers will be a list inside the object, use questionObj[i].answers[i] to ref
 let questionList = [
     {
         question: "Welcome to the code quiz!",
-        answers: "Try to answer the coding question within the time limit. Wrong answers subtract from your score!",
+        answers: [
+            "Try to answer the coding question within the time limit. Wrong answers subtract from your score!",
+            "ready"
+        ],
     },
     {
         question: "question 1 text",
@@ -66,7 +73,14 @@ let countdown = function() {
 // create intro function that displays the rules using questionObj[0] properties
     //pressing start will run playGame()
 let intro = function() {
-    
+    questionEl.textContent = questionList[0].question;
+    emptyChildren(answerEl);
+    answerP = document.createElement("p");
+    answerP.textContent = questionList[0].answers[0];
+    readyButton = document.createElement("button");
+    readyButton.textContent = questionList[0].answers[1];
+    answerEl.appendChild(answerP);
+    answerEl.appendChild(readyButton);
 }
 
 // create playGame() containing game logic
@@ -99,3 +113,5 @@ let playGame = function(e) {
 
 // create event listener
     // add function to delegate clicks to buttons by data-type-id
+
+intro();

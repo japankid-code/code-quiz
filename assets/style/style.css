@@ -18,7 +18,7 @@ html {
 }
 
 .divider {
-    margin: 20px 0 10px 0;
+    margin: 10px 0 10px 0;
     background-color: white;
     height: 5px;
     width: 100%;
@@ -54,6 +54,7 @@ section#question {
 
 #answer-form button {
     display: inline-flex;
+    margin: 1rem;
     align-items: center;
     justify-content: flex-start;
     align-self: start;
