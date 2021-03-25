@@ -24,13 +24,6 @@ function emptyChildren(parent) {
     // answers will be a list inside the object, use questionList[i].answers[i] to ref
 let questionList = [
     {
-        question: "Welcome to the code quiz!",
-        answers: [
-            "Try to answer the coding question within the time limit. Wrong answers subtract from your score!",
-            "ready"
-        ],
-    },
-    {
         question: "question 1 text",
         answers: [
             '1',
@@ -99,18 +92,6 @@ let countdown = function(timeLeft) {
 }
 // create intro function that displays the rules using questionList[0] properties
     //pressing start will run playGame()
-let intro = function(e) {
-    questionEl.textContent = questionList[0].question;
-    emptyChildren(answerEl);
-    answerP = document.createElement("p");
-    answerP.textContent = questionList[0].answers[0];
-    readyButton = document.createElement("button");
-    readyButton.textContent = questionList[0].answers[1];
-    answerEl.appendChild(answerP);
-    answerEl.appendChild(readyButton);
-    answerEl.removeEventListener("submit", buttonHandler);
-    answerEl.addEventListener("submit", playGame);
-}
 
 let questionMaker = function(q) {
     questionEl.textContent = questionList[q].question;
@@ -133,29 +114,26 @@ let questionMaker = function(q) {
 }
 
 // create playGame() containing game logic
-let playGame = function(e, q) {
+let playGame = function(q) {
     countdown(timeLeft);
-    e.preventDefault();
     answerEl.removeEventListener("submit", playGame);
-    q = 1;
-    let selection = null;
     // fill in question prompt and answer buttons from questionList
     questionMaker(q);
     answerList = Array.from(answerEl.children);
-    // produce array from answerEl using ES6. use this index position to determine wrongness
+    answerEl.addEventListener("click", function() {
+        console.log(e.target);
+    });
+
 }
-
-
 
 // create a buttonHandler() to preventdefault on all buttons
 var buttonHandler = function(e) {
     e.preventDefault();
+    let q = 0;
     console.log(e.target);
-    intro(e);
+    playGame(q);
 }
 
 // create event listener
     // add function to delegate clicks to buttons by data-type-id
-answerEl.addEventListener("submit", intro());
-
-intro();
+answerEl.addEventListener("submit", buttonHandler);
