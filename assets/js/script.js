@@ -76,6 +76,7 @@ let questionList = [
         ],
     }
 ]
+
 // create timer function for remaining time
 let countdown = function(timeLeft) {
     let timeInterval = setInterval(function() {
@@ -112,47 +113,47 @@ let intro = function(e) {
     countdown();
 }
 
+let questionMaker = function(q) {
+    questionEl.textContent = questionList[q].question;
+    emptyChildren(answerEl);
+    // generate buttons for each answer in answers
+    let answers = questionList[q].answers;
+    answers.forEach(function(index) {
+        let answerButton = document.createElement("button");
+        answerButton.textContent = questionList[q].answers[index - 1];
+        answerEl.appendChild(answerButton);
+        answerButton.addEventListener("click", function(e) {
+            e.preventDefault();
+            selection = parseInt(e.target.textContent);
+            console.log(selection);
+            return selection; 
+            }
+        );
+    });
+    q++;
+}
+
 // create playGame() containing game logic
 let playGame = function(e, q) {
     e.preventDefault();
+    answerEl.removeEventListener("click", playGame);
+    q = 1;
+    let selection = null;
+    questionMaker(q);
     // fill in question prompt and answer buttons from questionList
     // generate question text content `${questionList[q].question}`
     if (timeLeft > 0) {
-        for (let q = 1; q < questionList.length; q++) {
-            questionEl.textContent = questionList[q].question;
-            emptyChildren(answerEl);
-            answerEl.removeEventListener("click", playGame);
-            // generate buttons for each answer in answers
-            let answers = questionList[q].answers;
-            let a = 0;
-            answers.forEach(function(answer) {
-                let answerButton = document.createElement("button");
-                answerButton.textContent = questionList[q].answers[a];
-                answerEl.appendChild(answerButton);
-                a++;
-                answerButton.addEventListener("click", function(e) {
-                    e.preventDefault();
-                    let selection = parseInt(e.target.textContent);
-                    console.log(selection);
-                    return selection; 
-                    })
-            });
-            // switch here!! to handle different qs
-            // this will allow for different answers for each question
-            switch(q) {
-                case 1:
-                    if (selection !== 3) {
-                        //on wrong answer, subtract from the time remaining
-                        timeLeft -= 10;
-                        continue;
-                    } else {
-                        continue;
-                    }
-            }
+        
+        // switch here!! to handle different qs
+        // this will allow for different answers for each question
+        switch(q) {
+            case 1:
+                return ((selection === 3) ? (questionMaker) : (timeLeft -= 10 && questionMaker))
         }
-        console.log(q)
     }
 }
+
+
 
 // create a buttonHandler() to preventdefault on all buttons
 var buttonHandler = function(e) {
