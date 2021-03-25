@@ -32,6 +32,8 @@ let questionList = [
             '3',
             '4'
         ],
+        correct: 1,
+        num: 1
     },
     {
         question: "question 2 text",
@@ -41,6 +43,8 @@ let questionList = [
             '3',
             '4'
         ],
+        correct: 2,
+        num: 2
     },
     {
         question: "question 3 text",
@@ -50,6 +54,8 @@ let questionList = [
             '3',
             '4'
         ],
+        correct: 4,
+        num: 3
     },
     {
         question: "question 4 text",
@@ -59,6 +65,8 @@ let questionList = [
             '3',
             '4'
         ],
+        correct: 3,
+        num: 4
     },
     {
         question: "question 5 text",
@@ -68,6 +76,8 @@ let questionList = [
             '3',
             '4'
         ],
+        correct: 2,
+        num: 5
     }
 ]
 
@@ -117,7 +127,7 @@ let startGame = function() {
 }
 
 let nextRound = function(e) {
-    // calculate user score here using e.target, comparing to answerList (the button)
+    // calculate user score here using e.target, comparing to answerList (the buttons)
     answerList = Array.from(answerEl.children)
     console.log(e.target)
     questionList.shift();
