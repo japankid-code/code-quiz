@@ -11,6 +11,7 @@
 let questionEl = document.getElementById("question-text");
 let answerEl = document.getElementById("answer-form")
 let timerEl = document.getElementById("time-left")
+let descriptionP = document.getElementById("description");
 
 let timeLeft = 80;
 
@@ -91,47 +92,43 @@ let countdown = function(timeLeft) {
     }, 1000); // runs once per second
 }
 // create intro function that displays the rules using questionList[0] properties
-    //pressing start will run playGame()
+    //pressing start will run startGame()
 
 let questionMaker = function(q) {
-    questionEl.textContent = questionList[q].question;
+    questionEl.textContent = questionList[0].question;
     emptyChildren(answerEl);
     // generate buttons for each answer in answers
-    let answers = questionList[q].answers;
+    let answers = questionList[0].answers;
     answers.forEach(function(index) {
         let answerButton = document.createElement("button");
-        answerButton.textContent = questionList[q].answers[index - 1];
-        answerEl.appendChild(answerButton);
-        answerButton.addEventListener("click", function(e) {
-            e.preventDefault();
-            selection = parseInt(e.target.textContent);
-            return selection;
-            }
-        );
+        answerButton.textContent = questionList[0].answers[index - 1];
+        answerEl.appendChild(answerButton); 
+        answerButton.addEventListener("click", nextRound)
     });
-    q++;
-    return q;
+    
 }
 
-// create playGame() containing game logic
-let playGame = function(q) {
+// create startGame() containing game logic
+let startGame = function() {
     countdown(timeLeft);
-    answerEl.removeEventListener("submit", playGame);
-    // fill in question prompt and answer buttons from questionList
-    questionMaker(q);
-    answerList = Array.from(answerEl.children);
-    answerEl.addEventListener("click", function() {
-        console.log(e.target);
-    });
+    answerEl.removeEventListener("submit", startGame);
+    // fill in first prompt and answer buttons from questionList
+    questionMaker();
+}
 
+let nextRound = function(e) {
+    // calculate user score here using e.target, comparing to answerList (the button)
+    answerList = Array.from(answerEl.children)
+    console.log(e.target)
+    questionList.shift();
+    questionMaker(questionList);
 }
 
 // create a buttonHandler() to preventdefault on all buttons
 var buttonHandler = function(e) {
+    descriptionP.remove();
     e.preventDefault();
-    let q = 0;
-    console.log(e.target);
-    playGame(q);
+    startGame();
 }
 
 // create event listener
