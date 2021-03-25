@@ -77,9 +77,8 @@ let questionList = [
     }
 ]
 // create timer function for remaining time
-let countdown = function() {
-    var timeLeft = 80;
-    var timeInterval = setInterval(function() {
+let countdown = function(timeLeft) {
+    let timeInterval = setInterval(function() {
       // As long as the `timeLeft` is greater than 1
       if (timeLeft > 1) {
         // Set the `textContent` of `timerEl` to show the remaining seconds
@@ -110,39 +109,51 @@ let intro = function(e) {
     answerEl.appendChild(readyButton);
     answerEl.removeEventListener("click", buttonHandler);
     answerEl.addEventListener("click", playGame);
+    countdown();
 }
 
 // create playGame() containing game logic
-let playGame = function(e) {
-    e.preventDefault()
-    countdown();
+let playGame = function(e, q) {
+    e.preventDefault();
     // fill in question prompt and answer buttons from questionList
     // generate question text content `${questionList[q].question}`
     if (timeLeft > 0) {
         for (let q = 1; q < questionList.length; q++) {
-            console.log(questionList[q].question);
             questionEl.textContent = questionList[q].question;
             emptyChildren(answerEl);
-            // if there is time remaining, or there are questions left
-            if (questionList[q] === undefined) {
-                console.log("no more questions");
-                break;
-            }
+            answerEl.removeEventListener("click", playGame);
             // generate buttons for each answer in answers
-            for (let a = 0; a < questionList[q].answers.length; a++) {
+            let answers = questionList[q].answers;
+            let a = 0;
+            answers.forEach(function(answer) {
                 let answerButton = document.createElement("button");
                 answerButton.textContent = questionList[q].answers[a];
                 answerEl.appendChild(answerButton);
-                // textContent `${questionList[q].answers[a]}`
-                // need something that will wait for a click after generating all this stuff
-                // accepting click event target's id value to determine correctness
+                a++;
+                answerButton.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    let selection = parseInt(e.target.textContent);
+                    console.log(selection);
+                    return selection; 
+                    })
+            });
+            // switch here!! to handle different qs
+            // this will allow for different answers for each question
+            switch(q) {
+                case 1:
+                    if (selection !== 3) {
+                        //on wrong answer, subtract from the time remaining
+                        timeLeft -= 10;
+                        continue;
+                    } else {
+                        continue;
+                    }
             }
-            // on correct answer, value of event target's 
-                // data-type-id=n === questionList[i].answers[n], continue
-            //on wrong answer, subtract from the time remaining
         }
+        console.log(q)
     }
 }
+
 // create a buttonHandler() to preventdefault on all buttons
 var buttonHandler = function(e) {
     e.preventDefault();

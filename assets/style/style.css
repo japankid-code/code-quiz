@@ -49,6 +49,8 @@ section#question {
 }
 
 #answer-form {
+    display: flex;
+    flex-direction: column;
     width: 80%;
 }
 
