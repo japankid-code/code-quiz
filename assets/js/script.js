@@ -108,28 +108,34 @@ let intro = function(e) {
     readyButton.textContent = questionList[0].answers[1];
     answerEl.appendChild(answerP);
     answerEl.appendChild(readyButton);
-    playGame(e);
+    answerEl.removeEventListener("click", buttonHandler);
+    answerEl.addEventListener("click", playGame);
 }
 
 // create playGame() containing game logic
 let playGame = function(e) {
+    e.preventDefault()
+    countdown();
     // fill in question prompt and answer buttons from questionList
     // generate question text content `${questionList[q].question}`
     if (timeLeft > 0) {
         for (let q = 1; q < questionList.length; q++) {
-            console.log(q);
-            // if there is time remaing, or there are questions left
+            console.log(questionList[q].question);
+            questionEl.textContent = questionList[q].question;
+            emptyChildren(answerEl);
+            // if there is time remaining, or there are questions left
             if (questionList[q] === undefined) {
                 console.log("no more questions");
-                // generate buttons for each answer in answers
-            } else {
-                for (let a = 0; a < questionList[q].answers.length; a++) {
-                    console.log(a);
-                    // textContent `${questionList[q].answers[a]}`
-                    // need something that will wait for a click after generating all this stuff
-                    // accepting click event target's id value to determine correctness
-                    // while generating buttons for each answer, increment on data-type-id
-                }
+                break;
+            }
+            // generate buttons for each answer in answers
+            for (let a = 0; a < questionList[q].answers.length; a++) {
+                let answerButton = document.createElement("button");
+                answerButton.textContent = questionList[q].answers[a];
+                answerEl.appendChild(answerButton);
+                // textContent `${questionList[q].answers[a]}`
+                // need something that will wait for a click after generating all this stuff
+                // accepting click event target's id value to determine correctness
             }
             // on correct answer, value of event target's 
                 // data-type-id=n === questionList[i].answers[n], continue
@@ -146,6 +152,6 @@ var buttonHandler = function(e) {
 
 // create event listener
     // add function to delegate clicks to buttons by data-type-id
-answerEl.addEventListener("click", buttonHandler)
+answerEl.addEventListener("click", buttonHandler);
 
 intro();
