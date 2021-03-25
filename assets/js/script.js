@@ -8,9 +8,9 @@
 
 // let all the elements and variables we'll need to use
 // dont forget to add classes in html
-let questionEl = document.querySelector("#question-text");
-let answerEl = document.querySelector("#answer-form")
-let timerEl = document.querySelector("#time-left")
+let questionEl = document.getElementById("question-text");
+let answerEl = document.getElementById("answer-form")
+let timerEl = document.getElementById("time-left")
 
 let timeLeft = 80;
 
@@ -20,7 +20,7 @@ function emptyChildren(parent) {
     }
 }
 
-// create list of questionListects
+// create list of questions
     // answers will be a list inside the object, use questionList[i].answers[i] to ref
 let questionList = [
     {
@@ -81,20 +81,20 @@ let questionList = [
 let countdown = function(timeLeft) {
     let timeInterval = setInterval(function() {
       // As long as the `timeLeft` is greater than 1
-      if (timeLeft > 1) {
-        // Set the `textContent` of `timerEl` to show the remaining seconds
-        timerEl.textContent = `${timeLeft} seconds remaining.`;
-        timeLeft--;
-        return timeLeft;
-      } else if (timeLeft === 1) {
-        timerEl.textContent = `${timeLeft} second remaining.`;
-        timeLeft--;
-        return timeLeft;
-      } else {
-        timerEl.textContent = '';
-        clearInterval(timeInterval);
-        return timeLeft;
-      }
+        if (timeLeft > 1) {
+            // Set the `textContent` of `timerEl` to show the remaining seconds
+            timerEl.textContent = `${timeLeft} seconds remaining.`;
+            timeLeft--;
+            return timeLeft;
+        } else if (timeLeft === 1) {
+            timerEl.textContent = `${timeLeft} second remaining.`;
+            timeLeft--;
+            return timeLeft;
+        } else {
+            timerEl.textContent = '';
+            clearInterval(timeInterval);
+            return timeLeft;
+        }
     }, 1000); // runs once per second
 }
 // create intro function that displays the rules using questionList[0] properties
@@ -108,9 +108,8 @@ let intro = function(e) {
     readyButton.textContent = questionList[0].answers[1];
     answerEl.appendChild(answerP);
     answerEl.appendChild(readyButton);
-    answerEl.removeEventListener("click", buttonHandler);
-    answerEl.addEventListener("click", playGame);
-    countdown();
+    answerEl.removeEventListener("submit", buttonHandler);
+    answerEl.addEventListener("submit", playGame);
 }
 
 let questionMaker = function(q) {
@@ -125,32 +124,25 @@ let questionMaker = function(q) {
         answerButton.addEventListener("click", function(e) {
             e.preventDefault();
             selection = parseInt(e.target.textContent);
-            console.log(selection);
-            return selection; 
+            return selection;
             }
         );
     });
     q++;
+    return q;
 }
 
 // create playGame() containing game logic
 let playGame = function(e, q) {
+    countdown(timeLeft);
     e.preventDefault();
-    answerEl.removeEventListener("click", playGame);
+    answerEl.removeEventListener("submit", playGame);
     q = 1;
     let selection = null;
-    questionMaker(q);
     // fill in question prompt and answer buttons from questionList
-    // generate question text content `${questionList[q].question}`
-    if (timeLeft > 0) {
-        
-        // switch here!! to handle different qs
-        // this will allow for different answers for each question
-        switch(q) {
-            case 1:
-                return ((selection === 3) ? (questionMaker) : (timeLeft -= 10 && questionMaker))
-        }
-    }
+    questionMaker(q);
+    answerList = Array.from(answerEl.children);
+    // produce array from answerEl using ES6. use this index position to determine wrongness
 }
 
 
@@ -164,6 +156,6 @@ var buttonHandler = function(e) {
 
 // create event listener
     // add function to delegate clicks to buttons by data-type-id
-answerEl.addEventListener("click", buttonHandler);
+answerEl.addEventListener("submit", intro());
 
 intro();
