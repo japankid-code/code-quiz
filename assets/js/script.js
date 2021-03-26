@@ -12,8 +12,9 @@ let questionEl = document.getElementById("question-text");
 let answerEl = document.getElementById("answer-form")
 let timerEl = document.getElementById("time-left")
 let descriptionP = document.getElementById("description");
+let readyButton = document.getElementById("ready");
 
-let timeLeft = 80;
+// let timeLeft = 80;
 
 function emptyChildren(parent) {
     while (parent.firstChild) {
@@ -82,24 +83,26 @@ let questionList = [
 ]
 
 // create timer function for remaining time
-let countdown = function(timeLeft) {
-    let timeInterval = setInterval(function() {
-      // As long as the `timeLeft` is greater than 1
+let countdown = function() {
+    timeLeft = localStorage.getItem("timeLeft")
+    let timeInterval = setInterval(function() { // starts the timer
         if (timeLeft > 1) {
             // Set the `textContent` of `timerEl` to show the remaining seconds
             timerEl.textContent = `${timeLeft} seconds remaining.`;
             timeLeft--;
-            return timeLeft;
+            saveTimeLeft(timeLeft); // save to localStorage after update
         } else if (timeLeft === 1) {
             timerEl.textContent = `${timeLeft} second remaining.`;
             timeLeft--;
-            return timeLeft;
+            saveTimeLeft(timeLeft);
         } else {
             timerEl.textContent = '';
             clearInterval(timeInterval);
-            return timeLeft;
         }
+        console.log(timeLeft);
+        return timeLeft;
     }, 1000); // runs once per second
+    return timeLeft;
 }
 // create intro function that displays the rules using questionList[0] properties
     //pressing start will run startGame()
@@ -120,27 +123,50 @@ let questionMaker = function(q) {
 
 // create startGame() containing game logic
 let startGame = function() {
-    countdown(timeLeft);
     answerEl.removeEventListener("submit", startGame);
     // fill in first prompt and answer buttons from questionList
     questionMaker();
 }
 
 let nextRound = function(e) {
+    let targetEl = e.target;
     // calculate user score here using e.target, comparing to answerList (the buttons)
     answerList = Array.from(answerEl.children)
-    console.log(e.target)
-    questionList.shift();
-    questionMaker(questionList);
+    // checking the first question
+    if (targetEl === answerList[1]) {
+        console.log(answerList);
+        questionList.shift();
+        questionMaker(questionList);
+    } else {
+        timeLeft = timeSkip();
+        questionList.shift();
+        questionMaker(questionList);
+    }
+}
+
+let saveTimeLeft = function(value) {
+    localStorage.setItem("timeLeft", value);
+}
+
+let timeSkip = function() {
+    let timeLeft = localStorage.getItem("timeLeft");
+    timeLeft -= 10;
+    // debugger;
+    console.log(timeLeft);
+    saveTimeLeft(timeLeft);
+    return timeLeft;
 }
 
 // create a buttonHandler() to preventdefault on all buttons
 var buttonHandler = function(e) {
-    descriptionP.remove();
     e.preventDefault();
+    let timeLeft = 100;
+    localStorage.setItem("timeLeft", timeLeft);
+    descriptionP.remove();
+    countdown(timeLeft);
     startGame();
 }
 
 // create event listener
     // add function to delegate clicks to buttons by data-type-id
-answerEl.addEventListener("submit", buttonHandler);
+readyButton.addEventListener("click", buttonHandler);
