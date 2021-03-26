@@ -8,6 +8,7 @@
 
 // let all the elements and variables we'll need to use
 // dont forget to add classes in html
+let questionSection = document.getElementById("question")
 let questionEl = document.getElementById("question-text");
 let answerEl = document.getElementById("answer-form")
 let timerEl = document.getElementById("time-left")
@@ -99,7 +100,6 @@ let countdown = function() {
             timerEl.textContent = '';
             clearInterval(timeInterval);
         }
-        console.log(timeLeft);
         return timeLeft;
     }, 1000); // runs once per second
     return timeLeft;
@@ -115,17 +115,20 @@ let questionMaker = function(q) {
     answers.forEach(function(index) {
         let answerButton = document.createElement("button");
         answerButton.textContent = questionList[0].answers[index - 1];
-        answerEl.appendChild(answerButton); 
-        answerButton.addEventListener("click", nextRound)
+        answerEl.appendChild(answerButton);
+        if (questionList.length === 1) {
+            answerButton.addEventListener("click", submitScore);
+        } else {
+            answerButton.addEventListener("click", nextRound)
+        }
     });
-    
 }
 
 // create startGame() containing game logic
-let startGame = function() {
+let startGame = function(e) {
     answerEl.removeEventListener("submit", startGame);
     // fill in first prompt and answer buttons from questionList
-    questionMaker();
+    questionMaker(e);
 }
 
 let nextRound = function(e) {
@@ -142,6 +145,18 @@ let nextRound = function(e) {
         questionList.shift();
         questionMaker(questionList);
     }
+}
+
+let submitScore = function(e) {
+    emptyChildren(questionSection);
+    questionSection.insertAdjacentHTML(
+        `afterbegin`,
+        `<p>add your initials here and submit the score!!</p>
+        <button id="submit-score">submit score</button>
+        </form>
+        <div class="divider"></div>
+        <em><span id="result">great work!</span></em>`
+    );
 }
 
 let saveTimeLeft = function(value) {
@@ -164,7 +179,7 @@ var buttonHandler = function(e) {
     localStorage.setItem("timeLeft", timeLeft);
     descriptionP.remove();
     countdown(timeLeft);
-    startGame();
+    startGame(e);
 }
 
 // create event listener

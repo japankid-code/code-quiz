@@ -54,7 +54,8 @@ section#question {
     width: 80%;
 }
 
-#answer-form button {
+#answer-form button,
+#submit-score {
     display: inline-flex;
     margin: 1rem;
     align-items: center;
