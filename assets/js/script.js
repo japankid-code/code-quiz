@@ -15,7 +15,7 @@ let timerEl = document.getElementById("time-left")
 let descriptionP = document.getElementById("description");
 let readyButton = document.getElementById("ready");
 
-// let timeLeft = 80;
+let userScores = [];
 
 function emptyChildren(parent) {
     while (parent.firstChild) {
@@ -87,27 +87,35 @@ let questionList = [
 let countdown = function() {
     timeLeft = localStorage.getItem("timeLeft")
     let timeInterval = setInterval(function() { // starts the timer
-        if (timeLeft > 1) {
-            // Set the `textContent` of `timerEl` to show the remaining seconds
-            timerEl.textContent = `${timeLeft} seconds remaining.`;
-            timeLeft--;
-            saveTimeLeft(timeLeft); // save to localStorage after update
-        } else if (timeLeft === 1) {
-            timerEl.textContent = `${timeLeft} second remaining.`;
-            timeLeft--;
-            saveTimeLeft(timeLeft);
+        if (questionList.length > 0) {
+            if (timeLeft > 1) {
+                // Set the `textContent` of `timerEl` to show the remaining seconds
+                timerEl.textContent = `${timeLeft} seconds remaining.`;
+                timeLeft--;
+                saveTimeLeft(timeLeft); // save to localStorage after update
+            } else if (timeLeft === 1) {
+                timerEl.textContent = `${timeLeft} second remaining.`;
+                timeLeft--;
+                saveTimeLeft(timeLeft);
+            } else {
+                timerEl.textContent = `time's up!!`;
+                saveTimeLeft(timeLeft);
+                clearInterval(timeInterval);
+            }
+            return timeLeft;
         } else {
-            timerEl.textContent = '';
+            timerEl.textContent = `time's up!!`;
+            saveTimeLeft(timeLeft);
             clearInterval(timeInterval);
+            submitScore();
         }
-        return timeLeft;
     }, 1000); // runs once per second
     return timeLeft;
 }
 // create intro function that displays the rules using questionList[0] properties
     //pressing start will run startGame()
 
-let questionMaker = function(q) {
+let renderQuestion = function(q) {
     questionEl.textContent = questionList[0].question;
     emptyChildren(answerEl);
     // generate buttons for each answer in answers
@@ -128,7 +136,7 @@ let questionMaker = function(q) {
 let startGame = function(e) {
     answerEl.removeEventListener("submit", startGame);
     // fill in first prompt and answer buttons from questionList
-    questionMaker(e);
+    renderQuestion(e);
 }
 
 let nextRound = function(e) {
@@ -137,13 +145,12 @@ let nextRound = function(e) {
     answerList = Array.from(answerEl.children)
     // checking the first question
     if (targetEl === answerList[1]) {
-        console.log(answerList);
         questionList.shift();
-        questionMaker(questionList);
+        renderQuestion(questionList);
     } else {
         timeLeft = timeSkip();
         questionList.shift();
-        questionMaker(questionList);
+        renderQuestion(questionList);
     }
 }
 
