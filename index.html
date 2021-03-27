@@ -9,17 +9,18 @@
     <title>Document</title>
 </head>
 <header id="header">
-    <span id="high-scores">view high scores</span>
-    <span id="time-left">69</span>
+    <span id="view-high-scores">view high scores</span>
+    <span id="time-left"></span>
 </header>
 <body>
     <section id="question">
-        <h1>Question text goes here</h1>
-        <form id="answers" action="">
-            <button>answer buttons</button>
+        <h1 id="question-text">Welcome to Coding Quiz</h1>
+        <p id="description">Try to answer the coding question within the time limit. Wrong answers subtract from your score!</p>
+        <form id="answer-form" action="">
+            <button id="ready">Ready</button>
         </form>
         <div class="divider"></div>
-        <em><span id="result">wrong!!</span></em>
+        <em><span id="result"></span></em>
     </section>
 </body>
 <script src="./assets/js/script.js"></script>

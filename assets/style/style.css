@@ -18,7 +18,7 @@ html {
 }
 
 .divider {
-    margin: 20px 0 10px 0;
+    margin: 10px 0 10px 0;
     background-color: white;
     height: 5px;
     width: 100%;
@@ -48,12 +48,17 @@ section#question {
     font-size: 36px;
 }
 
-form#answers {
+#answer-form {
+    display: flex;
+    flex-direction: column;
     width: 80%;
 }
 
-form#answers button {
+#answer-form button,
+#submit-score,
+#ready {
     display: inline-flex;
+    margin: 1rem;
     align-items: center;
     justify-content: flex-start;
     align-self: start;
@@ -68,3 +73,33 @@ form#answers button {
     min-height: 44px;
 }
 /* question styling end */
+
+/* submit form styling start */
+#user-initials {
+    margin: 10px;
+    display: inline;
+}
+/* submit form styling end */
+
+/* high scores view page starts here */
+#all-scores {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.ind-score {
+    width: 100%;
+    display: flex;
+    border-bottom: 1px solid white;
+    justify-content: space-between;
+}
+
+p.initals, p.score {
+    display: inline;
+}
+
+#view-high-scores {
+    cursor: pointer;
+}
+/* high scores view page ends here */
