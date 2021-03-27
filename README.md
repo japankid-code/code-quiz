@@ -2,7 +2,6 @@
 
 Javascript coding quiz.
 Repo is [here](https://github.com/japankid-code/code-quiz).
-Outstanding issues [here](https://github.com/japankid-code/code-quiz/issues).
 Site is deployed [here](https://japankid-code.github.io/code-quiz/).
 
 ## basic overview of app
@@ -15,18 +14,16 @@ Site is deployed [here](https://japankid-code.github.io/code-quiz/).
 - last question loads score submit screen. :)
 - users scores save and load from localStorage.
 - high score rendering function renders after submitting score or clicking view high scores.
-- closing #4.
-- closing #2.
-- enhance readme.
-
-### mockup
-
-below gif outlines intended functionality:
-
-![animated gif showing the code quiz](mockup.gif)
+- don't forget to enhance the readme.
 
 ### preview
 
 preview of site here:
 
 ![code quiz main page](preview.png)
+
+### mockup
+
+below gif outlines intended functionality:
+
+![animated gif showing the code quiz](mockup.gif)
