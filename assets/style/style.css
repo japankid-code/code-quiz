@@ -91,6 +91,7 @@ section#question {
 .ind-score {
     width: 100%;
     display: flex;
+    border-bottom: 1px solid white;
     justify-content: space-between;
 }
 

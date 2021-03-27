@@ -18,54 +18,54 @@ function emptyChildren(parent) {
 // create list of questions
 let questionList = [
     {
-        question: "question 1 text",
+        question: "Which is best to use when declaring a function expression in ES6?",
         answers: [
-            '1',
-            '2',
-            '3',
-            '4'
+            'const',
+            'let',
+            'global',
+            'var'
         ],
-        correct: 1
+        correct: 0
     },
     {
-        question: "question 2 text",
+        question: "Which HTML element do we put the JavaScript in?",
         answers: [
-            '1',
-            '2',
-            '3',
-            '4'
-        ],
-        correct: 2
-    },
-    {
-        question: "question 3 text",
-        answers: [
-            '1',
-            '2',
-            '3',
-            '4'
-        ],
-        correct: 4
-    },
-    {
-        question: "question 4 text",
-        answers: [
-            '1',
-            '2',
-            '3',
-            '4'
+            '<javascript>',
+            '<js>',
+            '<svg>',
+            '<script>'
         ],
         correct: 3
     },
     {
-        question: "question 5 text",
+        question: "Javascript is a _____-side programming language.",
         answers: [
-            '1',
-            '2',
-            '3',
-            '4'
+            'client',
+            'server',
+            'none',
+            'both client and server'
+        ],
+        correct: 3
+    },
+    {
+        question: `Which are the correct “if” statements to execute certain code if “x” is equal to 27?`,
+        answers: [
+            'if (x is 27)',
+            'if (x === 52 / 2)',
+            'if (x === 27)',
+            'if x is 2:'
         ],
         correct: 2
+    },
+    {
+        question: "Which is the correct way to write a setTimeout statement while carrying a parameter?",
+        answers: [
+            `setTimeout(doThis(e), 1000);`,
+            'setTimeout(function() {doThis(e);}, 1000);',
+            'setTimeout(doThis, 1000);',
+            'setTimeout(doThis => {doThis(e);}, 1000);'
+        ],
+        correct: 1
     }
 ]
 
@@ -73,7 +73,7 @@ let questionList = [
 const countdown = function() {
     timeLeft = localStorage.getItem("timeLeft")
     let timeInterval = setInterval(function() { // starts the timer
-        if (questionList.length > 1) {
+        if (questionList.length > 0) {
             if (timeLeft > 1) {
                 // Set  the `textContent` of `timerEl` to show the remaining seconds
                 timerEl.textContent = `${timeLeft} seconds remaining.`;
@@ -85,7 +85,6 @@ const countdown = function() {
                 saveTimeLeft(timeLeft);
             } else { // time left is 0
                 timerEl.textContent = `time's up!!`;
-                alert("time is up!");
                 saveTimeLeft(timeLeft);
                 clearInterval(timeInterval);
                 submitScore();
@@ -109,18 +108,18 @@ const renderQuestion = function() {
     emptyChildren(answerEl);
     // generate buttons for each answer in answers
     let answers = questionList[0].answers;
-    answers.forEach(function(index) {
+    answers.forEach(function(answer, index) {
         let answerButton = document.createElement("button");
-        answerButton.textContent = questionList[0].answers[index - 1];
+        answerButton.textContent = questionList[0].answers[index];
         answerEl.appendChild(answerButton);
         if (questionList.length > 1) {
             answerButton.addEventListener("click", function(e) {
+                console.log(questionList.length);
                 e.preventDefault();
-                answerList = Array.from(answerEl.children)
                 let targetEl = e.target;
-                let correctAnswer = questionList[0].correct;
+                let correctIndex = questionList[0].correct;
                 // using object property passed in as index to compare :) ty troy
-                if (targetEl.textContent === questionList[0].answers[correctAnswer]) {
+                if (targetEl.textContent === questionList[0].answers[correctIndex]) {
                     resultEl.textContent = 'correct!';
                 } else {
                     resultEl.textContent = 'WRONG!!';
@@ -130,8 +129,11 @@ const renderQuestion = function() {
                 }, 1000);
             })
         } else {
+            console.log(questionList.length);
+            debugger;
             answerButton.addEventListener("click", function(e) {
-                answerList = Array.from(answerEl.children)
+                console.log(questionList.length);
+                e.preventDefault();
                 let targetEl = e.target;
                 let correctAnswer = questionList[0].correct;
                 // using object property passed in as index to compare :) ty troy
@@ -140,7 +142,6 @@ const renderQuestion = function() {
                 } else {
                     resultEl.textContent = 'WRONG!!';
                 }
-                e.preventDefault();
                 setTimeout(function() {
                     submitScore(e);
                 }, 1000);
@@ -153,8 +154,6 @@ const renderQuestion = function() {
 //contains scoring logic
 const nextRound = function(e) {
     let targetEl = e.target;
-    // calculate user score here using e.target, comparing to answerList (the buttons)
-    answerList = Array.from(answerEl.children)
     let correctAnswer = questionList[0].correct;
     // using object property passed in as index to compare :) ty troy
     if (targetEl.textContent === questionList[0].answers[correctAnswer]) {
