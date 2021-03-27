@@ -1,19 +1,10 @@
-// clicking the start button starts the timer and presents a question
-// answering the question correctly leads to another question
-// wrong answers subtract from the time remaining
-// if all questions are answered or timer reaches 0:
-// quiz is finished
-// prompt to enter in initials and save score in a list
-// user scores are stored in local storage for the high score list
-
-// let all the elements and variables we'll need to use
-// dont forget to add classes in html
 let questionSection = document.getElementById("question")
 let questionEl = document.getElementById("question-text");
 let answerEl = document.getElementById("answer-form")
 let timerEl = document.getElementById("time-left")
 let descriptionP = document.getElementById("description");
 let readyButton = document.getElementById("ready");
+let viewHighScore = document.getElementById("view-high-scores");
 
 let userScores = [];
 
@@ -34,8 +25,7 @@ let questionList = [
             '3',
             '4'
         ],
-        correct: 1,
-        num: 1
+        correct: 1
     },
     {
         question: "question 2 text",
@@ -45,8 +35,7 @@ let questionList = [
             '3',
             '4'
         ],
-        correct: 2,
-        num: 2
+        correct: 2
     },
     {
         question: "question 3 text",
@@ -56,8 +45,7 @@ let questionList = [
             '3',
             '4'
         ],
-        correct: 4,
-        num: 3
+        correct: 4
     },
     {
         question: "question 4 text",
@@ -67,8 +55,7 @@ let questionList = [
             '3',
             '4'
         ],
-        correct: 3,
-        num: 4
+        correct: 3
     },
     {
         question: "question 5 text",
@@ -78,8 +65,7 @@ let questionList = [
             '3',
             '4'
         ],
-        correct: 2,
-        num: 5
+        correct: 2
     }
 ]
 
@@ -101,6 +87,7 @@ const countdown = function() {
                 timerEl.textContent = `time's up!!`;
                 saveTimeLeft(timeLeft);
                 clearInterval(timeInterval);
+                submitScore();
             }
             return timeLeft;
         } else {
@@ -110,7 +97,7 @@ const countdown = function() {
             submitScore();
         }
     }, 1000); // runs once per second
-    return timeLeft;
+    return timeInterval;
 }
 // create intro function that displays the rules using questionList[0] properties
     //pressing start will run startGame()
@@ -132,13 +119,7 @@ const renderQuestion = function() {
     });
 }
 
-// create startGame() containing game logic
-const startGame = function(e) {
-    answerEl.removeEventListener("submit", startGame);
-    // fill in first prompt and answer buttons from questionList
-    renderQuestion(e);
-}
-
+//contains scoring logic
 const nextRound = function(e) {
     let targetEl = e.target;
     // calculate user score here using e.target, comparing to answerList (the buttons)
@@ -146,7 +127,6 @@ const nextRound = function(e) {
     let correctAnswer = questionList[0].correct;
     // using object property passed in as index to compare :) ty troy
     if (targetEl.textContent === questionList[0].answers[correctAnswer]) {
-        console.log
         questionList.shift();
         renderQuestion(questionList);
     } else {
@@ -175,15 +155,18 @@ const submitScore = function(e) {
             initials: submitInput.value,
             score: timeLeft,
         }
-        console.log(userScores);
-        console.log(currentScore);
         userScores.push(currentScore);
+        submitInput.value = '';
         localStorage.setItem("localScores", JSON.stringify(userScores));
+        renderHighScores();
     });
     questionSection.append(submitP, submitForm);
 }
 
 const loadScores = function() {
+    if (localStorage.getItem("localScores") === null) {
+        localStorage.setItem("localScores", JSON.stringify(userScores));
+    }
     userScores = JSON.parse(localStorage.getItem("localScores"));
 }
 
@@ -191,26 +174,62 @@ const saveTimeLeft = function(value) {
     localStorage.setItem("timeLeft", value);
 }
 
+const renderHighScores = function() {
+    timeLeft = 0;
+    saveTimeLeft(timeLeft);
+    emptyChildren(questionSection);
+    let heading = document.createElement("h2");
+    heading.textContent = `HIGH SCORES`;
+    let divider1 = document.createElement("div");
+    divider1.setAttribute("class", "divider");
+    let divider2 = document.createElement("div");
+    divider2.setAttribute("class", "divider");
+    // sort the scores using the score value
+    userScores.sort((a,b) => (a.score > b.score) ? -1 : 1);
+    localStorage.setItem("localScores", JSON.stringify(userScores));
+    let allScores = document.createElement("div");
+    allScores.setAttribute("id", "all-scores");
+    userScores.forEach(function(userScore, index) {
+        let individualScore = document.createElement("div");
+        individualScore.setAttribute("class", "ind-score");
+        let initials = document.createElement("p");
+        initials.setAttribute("class", "initals");
+        initials.textContent = userScores[index].initials;
+        let score = document.createElement("p");
+        score.setAttribute("class", "score");
+        score.textContent = userScores[index].score;
+        individualScore.append(initials, score);
+        allScores.append(individualScore);
+    })
+    // started working on button to play again, cant quite get it working
+    // let playAgain = document.createElement("button");
+    // playAgain.setAttribute("id", "ready");
+    // playAgain.textContent = "ready to try again?";
+    // playAgain.addEventListener("click", function(e){startGame();});
+    questionSection.append(heading, divider1, allScores, divider2);
+}
+
 const timeSkip = function() {
     let timeLeft = localStorage.getItem("timeLeft");
     timeLeft -= 10;
-    // debugger;
-    console.log(timeLeft);
     saveTimeLeft(timeLeft);
     return timeLeft;
 }
 
-// create a buttonHandler() to preventdefault on all buttons
-const buttonHandler = function(e) {
-    e.preventDefault();
-    let timeLeft = 63;
+// create a startGame() to preventdefault on all buttons
+const startGame = function(e) {
+    if (e !== undefined) {
+        e.preventDefault();
+    }
+    let timeLeft = 100;
     localStorage.setItem("timeLeft", timeLeft);
     descriptionP.remove();
     countdown(timeLeft);
-    startGame(e);
+    renderQuestion();
 }
 
 // create event listener
     // add function to delegate clicks to buttons by data-type-id
-readyButton.addEventListener("click", buttonHandler);
+readyButton.addEventListener("click", startGame);
+viewHighScore.addEventListener("click", renderHighScores);
 loadScores();
