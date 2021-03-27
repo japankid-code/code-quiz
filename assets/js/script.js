@@ -16,7 +16,6 @@ function emptyChildren(parent) {
 }
 
 // create list of questions
-    // answers will be a list inside the object, use questionList[i].answers[i] to ref
 let questionList = [
     {
         question: "question 1 text",
@@ -86,19 +85,23 @@ const countdown = function() {
                 saveTimeLeft(timeLeft);
             } else { // time left is 0
                 timerEl.textContent = `time's up!!`;
-                saveTimeLeft(timeLeft);
-                clearInterval(timeInterval);
-            }
-        } else {
-            timerEl.textContent = `time's up!!`;
+                alert("time is up!");
                 saveTimeLeft(timeLeft);
                 clearInterval(timeInterval);
                 submitScore();
+            }
+        } else { // after the last question gets answered
+            timerEl.textContent = `quiz finished!!`;
+            saveTimeLeft(timeLeft);
+            clearInterval(timeInterval);
+            submitScore();
         }
     }, 1000); // runs once per second
 }
-// create intro function that displays the rules using questionList[0] properties
-    //pressing start will run startGame()
+
+const saveTimeLeft = function(value) {
+    localStorage.setItem("timeLeft", value);
+}
 
 const renderQuestion = function() {
     resultEl.textContent = '';
@@ -198,10 +201,6 @@ const loadScores = function() {
     userScores = JSON.parse(localStorage.getItem("localScores"));
 }
 
-const saveTimeLeft = function(value) {
-    localStorage.setItem("timeLeft", value);
-}
-
 const renderHighScores = function() {
     timeLeft = 0;
     saveTimeLeft(timeLeft);
@@ -238,6 +237,7 @@ const renderHighScores = function() {
 }
 
 const timeSkip = function() {
+    // subtracts from the time left
     let timeLeft = localStorage.getItem("timeLeft");
     timeLeft -= 10;
     saveTimeLeft(timeLeft);
