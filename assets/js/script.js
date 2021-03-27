@@ -5,6 +5,7 @@ let timerEl = document.getElementById("time-left")
 let descriptionP = document.getElementById("description");
 let readyButton = document.getElementById("ready");
 let viewHighScore = document.getElementById("view-high-scores");
+let resultEl = document.getElementById("result");
 
 let userScores = [];
 
@@ -73,7 +74,7 @@ let questionList = [
 const countdown = function() {
     timeLeft = localStorage.getItem("timeLeft")
     let timeInterval = setInterval(function() { // starts the timer
-        if (questionList.length > 0) {
+        if (questionList.length > 1) {
             if (timeLeft > 1) {
                 // Set  the `textContent` of `timerEl` to show the remaining seconds
                 timerEl.textContent = `${timeLeft} seconds remaining.`;
@@ -83,26 +84,24 @@ const countdown = function() {
                 timerEl.textContent = `${timeLeft} second remaining.`;
                 timeLeft--;
                 saveTimeLeft(timeLeft);
-            } else {
+            } else { // time left is 0
                 timerEl.textContent = `time's up!!`;
                 saveTimeLeft(timeLeft);
                 clearInterval(timeInterval);
-                submitScore();
             }
-            return timeLeft;
         } else {
             timerEl.textContent = `time's up!!`;
-            saveTimeLeft(timeLeft);
-            clearInterval(timeInterval);
-            submitScore();
+                saveTimeLeft(timeLeft);
+                clearInterval(timeInterval);
+                submitScore();
         }
     }, 1000); // runs once per second
-    return timeInterval;
 }
 // create intro function that displays the rules using questionList[0] properties
     //pressing start will run startGame()
 
 const renderQuestion = function() {
+    resultEl.textContent = '';
     questionEl.textContent = questionList[0].question;
     emptyChildren(answerEl);
     // generate buttons for each answer in answers
@@ -111,12 +110,41 @@ const renderQuestion = function() {
         let answerButton = document.createElement("button");
         answerButton.textContent = questionList[0].answers[index - 1];
         answerEl.appendChild(answerButton);
-        if (questionList.length === 1) {
-            answerButton.addEventListener("click", submitScore);
+        if (questionList.length > 1) {
+            answerButton.addEventListener("click", function(e) {
+                e.preventDefault();
+                answerList = Array.from(answerEl.children)
+                let targetEl = e.target;
+                let correctAnswer = questionList[0].correct;
+                // using object property passed in as index to compare :) ty troy
+                if (targetEl.textContent === questionList[0].answers[correctAnswer]) {
+                    resultEl.textContent = 'correct!';
+                } else {
+                    resultEl.textContent = 'WRONG!!';
+                }
+                setTimeout(function() {
+                    nextRound(e);
+                }, 1000);
+            })
         } else {
-            answerButton.addEventListener("click", nextRound)
+            answerButton.addEventListener("click", function(e) {
+                answerList = Array.from(answerEl.children)
+                let targetEl = e.target;
+                let correctAnswer = questionList[0].correct;
+                // using object property passed in as index to compare :) ty troy
+                if (targetEl.textContent === questionList[0].answers[correctAnswer]) {
+                    resultEl.textContent = 'correct!';
+                } else {
+                    resultEl.textContent = 'WRONG!!';
+                }
+                e.preventDefault();
+                setTimeout(function() {
+                    submitScore(e);
+                }, 1000);
+            });
         }
     });
+    
 }
 
 //contains scoring logic
