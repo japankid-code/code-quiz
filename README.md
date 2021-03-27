@@ -5,14 +5,19 @@ Repo is [here](https://github.com/japankid-code/code-quiz).
 Outstanding issues [here](https://github.com/japankid-code/code-quiz/issues).
 Site is deployed [here](https://japankid-code.github.io/code-quiz/).
 
-## outline
+## basic overview of app
 
-clicking the start button starts the timer and presents a question.
-answering the question correctly leads to another question.
-wrong answers subtract from the time remaining.
-if all questions are answered or timer reaches 0: quiz is finished.
-prompt to enter in initials and save score in a list.
-user scores are stored in local storage for the high score list.
+- pseudocode first!
+- created the HTML with its intro.
+- questions render and timer starts after hitting ready, correctness displays for 1 second after choosing an answer.
+- timer is used to take score, answering incorrectly subtracts from time left, thereby lowering score.
+- answering questions modifies the question array to produce the next question.
+- last question loads score submit screen. :)
+- users scores save and load from localStorage.
+- high score rendering function renders after submitting score or clicking view high scores.
+- closing #4.
+- closing #2.
+- enhance readme.
 
 ### mockup
 
