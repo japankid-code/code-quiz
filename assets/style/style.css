@@ -72,3 +72,10 @@ section#question {
     min-height: 44px;
 }
 /* question styling end */
+
+/* submit form styling start */
+#user-initials {
+    margin: 10px;
+    display: inline;
+}
+/* submit form styling end */
