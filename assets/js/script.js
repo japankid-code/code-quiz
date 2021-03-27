@@ -244,7 +244,7 @@ const timeSkip = function() {
     return timeLeft;
 }
 
-// create a startGame() to preventdefault on all buttons
+// create a startGame()
 const startGame = function(e) {
     if (e !== undefined) {
         e.preventDefault();
@@ -257,7 +257,6 @@ const startGame = function(e) {
 }
 
 // create event listener
-    // add function to delegate clicks to buttons by data-type-id
 readyButton.addEventListener("click", startGame);
 viewHighScore.addEventListener("click", renderHighScores);
 loadScores();
