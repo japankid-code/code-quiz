@@ -55,7 +55,8 @@ section#question {
 }
 
 #answer-form button,
-#submit-score {
+#submit-score,
+#ready {
     display: inline-flex;
     margin: 1rem;
     align-items: center;
@@ -79,3 +80,25 @@ section#question {
     display: inline;
 }
 /* submit form styling end */
+
+/* high scores view page starts here */
+#all-scores {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.ind-score {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+p.initals, p.score {
+    display: inline;
+}
+
+#view-high-scores {
+    cursor: pointer;
+}
+/* high scores view page ends here */
