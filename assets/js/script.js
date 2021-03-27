@@ -73,27 +73,31 @@ let questionList = [
 const countdown = function() {
     timeLeft = localStorage.getItem("timeLeft")
     let timeInterval = setInterval(function() { // starts the timer
-        if (questionList.length > 0) {
-            if (timeLeft > 1) {
+        if (timeLeft > 1) { // theres time left
+            if (questionList.length > 0) { // and questions are left
                 // Set  the `textContent` of `timerEl` to show the remaining seconds
                 timerEl.textContent = `${timeLeft} seconds remaining.`;
                 timeLeft--;
                 saveTimeLeft(timeLeft); // save to localStorage after update
-            } else if (timeLeft === 1) {
-                timerEl.textContent = `${timeLeft} second remaining.`;
-                timeLeft--;
-                saveTimeLeft(timeLeft);
-            } else { // time left is 0
-                timerEl.textContent = `time's up!!`;
+            } else if (questionList.length === 0) { // time left and all questions answered
+                timerEl.textContent = `quiz finished!!`;
                 saveTimeLeft(timeLeft);
                 clearInterval(timeInterval);
                 submitScore();
             }
-        } else { // after the last question gets answered
-            timerEl.textContent = `quiz finished!!`;
-            saveTimeLeft(timeLeft);
-            clearInterval(timeInterval);
-            submitScore();
+        } else if (timeLeft === 1) { // one second left
+            if (questionList.length > 0) { // and questions left
+                timerEl.textContent = `${timeLeft} second remaining.`;
+                timeLeft--;
+                saveTimeLeft(timeLeft);
+            }
+        } else if (timeLeft === 0) { // no time left
+            if (questionList.length > 0) { // and questions left
+                timerEl.textContent = `time's up!!`;
+                saveTimeLeft(timeLeft);
+                clearInterval(timeInterval);
+                if (questionList.length === 1) {submitScore();};
+            }
         }
     }, 1000); // runs once per second
 }
@@ -114,7 +118,6 @@ const renderQuestion = function() {
         answerEl.appendChild(answerButton);
         if (questionList.length > 1) {
             answerButton.addEventListener("click", function(e) {
-                console.log(questionList.length);
                 e.preventDefault();
                 let targetEl = e.target;
                 let correctIndex = questionList[0].correct;
@@ -129,10 +132,7 @@ const renderQuestion = function() {
                 }, 1000);
             })
         } else {
-            console.log(questionList.length);
-            debugger;
             answerButton.addEventListener("click", function(e) {
-                console.log(questionList.length);
                 e.preventDefault();
                 let targetEl = e.target;
                 let correctAnswer = questionList[0].correct;
@@ -167,6 +167,9 @@ const nextRound = function(e) {
 }
 
 const submitScore = function(e) {
+    if (questionList.length === 1) {
+        questionList.shift();
+    }
     emptyChildren(questionSection);
     // fill in the submit form with 
     let submitP = document.createElement("h3");
