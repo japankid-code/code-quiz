@@ -127,9 +127,11 @@ const renderQuestion = function() {
                 } else {
                     resultEl.textContent = 'WRONG!!';
                 }
+                let answers = Array.from(answerEl.children);
+                answers.forEach(answer => answer.disabled = true);
                 setTimeout(function() {
                     nextRound(e);
-                }, 1000);
+                }, 3000);
             })
         } else {
             answerButton.addEventListener("click", function(e) {
